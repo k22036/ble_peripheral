@@ -20,7 +20,7 @@ class ApproachCharacteristic(Characteristic):
 
     def onReadRequest(self, offset, callback):
         print('ApproachCharacteristic - onReadRequest')
-        callback(result=Characteristic.RESULT_SUCCESS, data=self._value)
+        callback(result=Characteristic.RESULT_SUCCESS, data="Hello World".encode())
 
     def onSubscribe(self, maxValueSize, updateValueCallback):
         print('ApproachCharacteristic - onSubscribe')
