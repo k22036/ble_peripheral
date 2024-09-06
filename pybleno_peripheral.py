@@ -19,10 +19,19 @@ class ApproachCharacteristic(Characteristic):
         self._value = str(0).encode()
         self._updateValueCallback = None
 
-    def onWriteRequest(self, data, offset, withoutResponse, callback):
-        recStr = data.decode('utf-8')
-        print('ApproachCharacteristic - onWriteRequest: value = ' + recStr)
+def onWriteRequest(self, data, offset, withoutResponse, callback):
+    # バイトデータを文字列に変換（デコード）
+    received_str = data.decode('utf-8', errors='replace')
+    
+    print(f'ApproachCharacteristic - onWriteRequest: value = {received_str}')
+    
+    if withoutResponse:
+        # クライアントはレスポンスを期待していないので、何もしない
+        print("Write request without response")
+    else:
+        # クライアントがレスポンスを期待している場合は、正常終了を通知
         callback(Characteristic.RESULT_SUCCESS)
+
 
     def onReadRequest(self, offset, callback):
         print('ApproachCharacteristic - onReadRequest')
