@@ -20,8 +20,8 @@ class ApproachCharacteristic(Characteristic):
         self._updateValueCallback = None
 
     def onWriteRequest(self, data, offset, withoutResponse, callback):
-        print('ApproachCharacteristic - onWriteRequest: value = ' +
-              data)
+        recStr = data.decode('utf-8')
+        print('ApproachCharacteristic - onWriteRequest: value = ' + recStr)
         callback(Characteristic.RESULT_SUCCESS)
 
     def onReadRequest(self, offset, callback):
