@@ -1,3 +1,4 @@
+import time
 from pybleno import *
 
 bleno = Bleno()
@@ -11,16 +12,22 @@ class ApproachCharacteristic(Characteristic):
     def __init__(self):
         Characteristic.__init__(self, {
             'uuid': APPROACH_CHARACTERISTIC_UUID,
-            'properties': ['read', 'notify'],
+            'properties': ['write', 'read', 'notify'],
             'value': None
         })
 
         self._value = str(0).encode()
         self._updateValueCallback = None
 
+    def onWriteRequest(self, data, offset, withoutResponse, callback):
+        print('ApproachCharacteristic - onWriteRequest: value = ' +
+              data.toString('hex'))
+        callback(Characteristic.RESULT_SUCCESS)
+
     def onReadRequest(self, offset, callback):
         print('ApproachCharacteristic - onReadRequest')
-        callback(result=Characteristic.RESULT_SUCCESS, data="Hello World".encode())
+        callback(result=Characteristic.RESULT_SUCCESS,
+                 data="Hello World".encode())
 
     def onSubscribe(self, maxValueSize, updateValueCallback):
         print('ApproachCharacteristic - onSubscribe')
@@ -37,7 +44,8 @@ def onStateChange(state):
     print('on -> stateChange: ' + state)
 
     if (state == 'poweredOn'):
-        bleno.startAdvertising(name='Approach', service_uuids=[APPROACH_SERVICE_UUID])
+        bleno.startAdvertising(name='Approach', service_uuids=[
+                               APPROACH_SERVICE_UUID])
     else:
         bleno.stopAdvertising()
 
@@ -48,7 +56,8 @@ approachCharacteristic = ApproachCharacteristic()
 
 
 def onAdvertisingStart(error):
-    print('on -> advertisingStart: ' + ('error ' + error if error else 'success'))
+    print('on -> advertisingStart: ' +
+          ('error ' + error if error else 'success'))
 
     if not error:
         bleno.setServices([
@@ -66,9 +75,8 @@ bleno.on('advertisingStart', onAdvertisingStart)
 bleno.start()
 
 
-import time
-
 counter = 0
+
 
 def task():
     global counter
@@ -76,7 +84,8 @@ def task():
     approachCharacteristic._value = str(counter).encode()
     if approachCharacteristic._updateValueCallback:
 
-        print('Sending notification with value : ' + str(approachCharacteristic._value))
+        print('Sending notification with value : ' +
+              str(approachCharacteristic._value))
 
         notificationBytes = str(approachCharacteristic._value).encode()
         approachCharacteristic._updateValueCallback(data=notificationBytes)
@@ -85,4 +94,3 @@ def task():
 while True:
     task()
     time.sleep(1)
-
