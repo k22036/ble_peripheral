@@ -21,7 +21,7 @@ class ApproachCharacteristic(Characteristic):
 
     def onWriteRequest(self, data, offset, withoutResponse, callback):
         print('ApproachCharacteristic - onWriteRequest: value = ' +
-              data.toString('hex'))
+              data)
         callback(Characteristic.RESULT_SUCCESS)
 
     def onReadRequest(self, offset, callback):
