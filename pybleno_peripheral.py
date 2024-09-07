@@ -21,10 +21,7 @@ class ApproachCharacteristic(Characteristic):
 
     def onWriteRequest(self, data, offset, withoutResponse, callback):
         # バイトデータを文字列に変換（デコード）
-        received_array = [int(str(x), 16) for x in data]
-        raw_data = [x for x in data]
-        print(
-            f'ApproachCharacteristic - onWriteRequest: raw_data = {raw_data}')
+        received_array = [x for x in data]
         print(
             f'ApproachCharacteristic - onWriteRequest: value = {received_array}')
 
