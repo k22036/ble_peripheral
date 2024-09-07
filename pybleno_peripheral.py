@@ -21,11 +21,9 @@ class ApproachCharacteristic(Characteristic):
 
     def onWriteRequest(self, data, offset, withoutResponse, callback):
         # バイトデータを文字列に変換（デコード）
-        received_str = ''.join([chr(x) for x in data])
-        print(f'ApproachCharacteristic - onWriteRequest: raw_data = {data}')
-
+        received_array = [int(x, 16) for x in data]
         print(
-            f'ApproachCharacteristic - onWriteRequest: value = {received_str}')
+            f'ApproachCharacteristic - onWriteRequest: value = {received_array}')
 
         if withoutResponse:
             # クライアントはレスポンスを期待していないので、何もしない
